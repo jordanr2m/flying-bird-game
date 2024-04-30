@@ -1,4 +1,5 @@
 const score = document.querySelector(".score");
+const startContainer = document.querySelector(".button-container");
 const startScreen = document.querySelector(".startScreen");
 const expert = document.querySelector(".expert");
 const gameArea = document.querySelector(".gameArea");
@@ -15,8 +16,7 @@ function start() {
     // Set up UI
     gameArea.innerHTML = ""; // clears game on restarts
     gameMessage.classList.add("hide");
-    startScreen.classList.add("hide");
-    expert.classList.add("hide");
+    startContainer.classList.add("hide");
 
     // Create BIRD character element
     let bird = document.createElement("div");
@@ -88,8 +88,8 @@ function movePipes(bird) {
 
     // MOVE THE PIPES
     pipes.forEach(pipe => {
-        pipe.x -= player.speed; // move pipe by subrtacting player speed from pipe's x coord
-        pipe.style.left = `${pipe.x}px`; // update left coord w pipe.x val in px
+        pipe.x -= player.speed; // move pipe to the left
+        pipe.style.left = `${pipe.x}px`; // update style to match
 
         // Check to see if pipes are off screen
         if (pipe.x < 0) {
