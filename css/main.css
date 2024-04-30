@@ -1,0 +1,88 @@
+body {
+    /* Hide scrollbars */
+    overflow: hidden;
+}
+
+.score {
+    background-color: black;
+    color: white;
+    text-align: center;
+    height: 40px;
+    font-size: 1.5em;
+    font-family: "Roboto Mono", monospace;
+    padding-top: 10px;
+    /* Make score overlap pipes */
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+}
+
+.startScreen {
+    position: absolute;
+    background-color: red;
+    cursor: pointer;
+    left: 25%;
+    top: 100px;
+    color: white;
+    width: 50%;
+    /* center align */
+    text-align: center;
+    padding: 15px;
+    border: 1px solid black;
+}
+
+.hide {
+    display: none;
+}
+
+.gameArea {
+    background-color: skyblue;
+    width: 100%;
+    height: 100vh;
+    margin: auto; /* in case want to adjust size later */
+}
+
+.gameMessage {
+    position: absolute;
+    top: 10%;
+    text-align: center;
+    left: 20%;
+    width: 60%;
+    background-color: aliceblue;
+    font-size: 1.5em;
+    cursor: pointer;
+    /* overlay it on top of game */
+    z-index: 99;
+}
+
+.pipe {
+    width: 100px; /* Default width */
+    position: absolute; /* Need this in order to move elements */
+    text-align: center;
+}
+
+/* Bird Character styling */
+.bird {
+    position: absolute;
+    top: 100px; /* how far to start from top of screen */
+    left: 50px;
+    width: 50px;
+    height: 44px;
+     /* in case we want to write in it */
+    line-height: 40px;
+    font-size: 1.5em;
+    background-image: url(../img/color-bird-48.png);
+    background-size: cover;
+}
+
+.wing {
+    position: absolute;
+    background-color: rgb(240, 240, 240);
+    width: 26px;
+    height: 14px;
+    border-radius: 8px;
+    border: 2px solid black;
+    /* Defualt positions within bird body */
+    top: 17px;
+    left: -3px;
+}
