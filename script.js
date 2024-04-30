@@ -1,13 +1,14 @@
 const score = document.querySelector(".score");
 const startScreen = document.querySelector(".startScreen");
+const expert = document.querySelector(".expert");
 const gameArea = document.querySelector(".gameArea");
 const gameMessage = document.querySelector(".gameMessage");
 
 let keys = {}; // Track keys player presses
 let player = {}; // Store player info
+player.speed = 2; // How quickly the player moves (2 is normal mode)
 
 function start() {
-    player.speed = 2; // How quickly the player moves
     player.score = 0; // Set score to 0
     player.inPlay = true; // Must be true to play game
 
@@ -15,6 +16,7 @@ function start() {
     gameArea.innerHTML = ""; // clears game on restarts
     gameMessage.classList.add("hide");
     startScreen.classList.add("hide");
+    expert.classList.add("hide");
 
     // Create BIRD character element
     let bird = document.createElement("div");
@@ -114,7 +116,7 @@ function isCollide(elementA, elementB) {
 
     // Must add a ! here in order to return the correct boolean value
     return !(
-        (aRect.bottom < bRect.top) || // vertical overlap
+        (aRect.bottom < (bRect.top + 6)) || // vertical overlap (add 6 to account for top of bird img)
         (aRect.top > bRect.bottom) || // vertical
         (aRect.right < bRect.left) || // horizontal overlap
         (aRect.left > bRect.right)  // horizontal
@@ -147,7 +149,7 @@ function playGame() {
 
         // PLAYER MOVEMENT. Add in conditions here to prevent the character from going off screen. Subtract to account for size of bird div
         if (keys.ArrowLeft && player.x > 0) {
-            player.x -= player.speed;
+            player.x -= (player.speed + 1); // add 1 to account for game moving forward
             move = true;
         }
         if (keys.ArrowRight && player.x < (gameArea.offsetWidth - 50)) {
@@ -204,6 +206,12 @@ function pressOff(e) {
 // Start game on start & end screens
 startScreen.addEventListener("click", start);
 gameMessage.addEventListener("click", start);
+
+// Start game on Expert Mode
+expert.addEventListener("click", () => {
+    player.speed = 4;
+    start();
+});
 
 // Track key presses from player
 document.addEventListener("keydown", pressOn);

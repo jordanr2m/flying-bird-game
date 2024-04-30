@@ -17,19 +17,43 @@ body {
     z-index: 100;
 }
 
-.startScreen {
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.startScreen,
+.expert {
     cursor: pointer;
     font-family: "Roboto Mono", monospace;
     color: white;
-    background-color: red;
     position: absolute;
-    width: 50%;
-    left: 25%;
-    top: 100px;
-    /* center align */
     text-align: center;
-    padding: 15px;
+    padding: 15px 0;
     border: 1px solid black;
+}
+
+.startScreen {
+    background-color: red;
+    top: 100px;
+    width: 50%;
+}
+
+.startScreen:hover {
+    background-color: aliceblue;
+    color: red;
+}
+
+.expert {
+    background-color: blue;
+    top: 180px;
+    width: 25%;
+}
+
+.expert:hover {
+    background-color: yellow;
+    color: black;
 }
 
 .hide {
