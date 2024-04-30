@@ -43,44 +43,37 @@ function start() {
     window.requestAnimationFrame(playGame);
 }
 
-// pass in starting position of the pipe (where first pipe will start)
 function buildPipes(startPos) {
     // calculate screen size for pipe positioning
     let totalHeight = gameArea.offsetHeight;
     let totalWidth = gameArea.offsetWidth;
-    player.pipe++; // increment # of player pipes to keep loop going
-
-    // Create pipeColor so both pipes are the same color each time
     let pipeColor = randomColor();
+    player.pipe++; // increment # of pipes to keep building
 
     // Create TOP PIPE
-    let pipe1 = document.createElement("div"); // create pipes
+    let pipe1 = document.createElement("div");
     pipe1.classList.add("pipe");
     pipe1.start = startPos + totalWidth; // dynamic start position. This will move the pipes all the way off the start screen to start
     pipe1.height = Math.floor(Math.random() * 350); // give it a random height up to 350px (top pipe is shorter)
-    pipe1.style.height = `${pipe1.height}px`; // assign random height
-    pipe1.style.left = `${pipe1.start}px`; // dynamically move (same as bird). Left and pipe.x are paired in order to move pipes
-    pipe1.x = pipe1.start; // MUST HAVE THIS in order to see pipes. Using same format we used with bird: pipes will have an x value, which we will use to move them horizontally (these are props we made up for the pipe object). Y value is not needed here since pipes don't move vertically at all
-    pipe1.style.top = "0px"; // will always start all the way at the top
-    pipe1.id = player.pipe; // all pipes will have different id #s
+    pipe1.style.height = `${pipe1.height}px`;
+    pipe1.style.left = `${pipe1.start}px`; 
+    pipe1.x = pipe1.start; // use this to move pipes
+    pipe1.style.top = "0px"; // puts pipe at very top of screen
     pipe1.style.backgroundColor = pipeColor;
-    // Add pipe to game area
     gameArea.appendChild(pipe1);
 
-    // Create BOTTOM PIPE (2 pipes will be aligned)
-    // create random horizontal spacing between each pipe
-    let pipeSpace = Math.floor(Math.random() * 250) + 150; // Make a space up to 399px, but with minimum of at least 150px for bird to fly through
+    // Create BOTTOM PIPE
+    // create random horizontal spacing between each pipe (at least 150px)
+    let pipeSpace = Math.floor(Math.random() * 250) + 150;
     let pipe2 = document.createElement("div");
     pipe2.classList.add("pipe");
-    pipe2.innerHTML = `<br>${player.pipe}`;  // so we can see each pipe's #
+    pipe2.innerHTML = `<br>${player.pipe}`;  // see each pipe's #
     pipe2.start = pipe1.start; // set same as pipe1 start (keeps them paired)
-    pipe2.style.height = `${totalHeight - pipe1.height - pipeSpace}px`; // calculate height available for bottom pipe accounting for space b/w pipes & pipe1's height. Not a random height (like pipe1)
-    pipe2.style.left = `${pipe1.start}px`; // same as pipe1 start (keeps them paired)
-    pipe2.x = pipe1.start; // same as pipe1. Don't need px here bc we need only a # value to calculate movement
-    pipe2.style.bottom = "0px"; // will always start all the way at the bottom
-    pipe2.id = player.pipe; // same ids as top pipes
+    pipe2.style.height = `${totalHeight - pipe1.height - pipeSpace}px`; // calculate height available for bottom pipe accounting for space b/w pipes & pipe1's height
+    pipe2.style.left = `${pipe1.start}px`; // set same as pipe1
+    pipe2.x = pipe1.start;
+    pipe2.style.bottom = "0px"; // puts pipes at bottom of screen
     pipe2.style.backgroundColor = pipeColor;
-    // Add pipe to game area
     gameArea.appendChild(pipe2);
 }
 
@@ -90,55 +83,46 @@ function randomColor() {
 }
 
 function movePipes(bird) {
-    // Node list to store all of the lines (pipes)
     let pipes = document.querySelectorAll(".pipe");
     let counter = 0; // counts how many pipes we've removed
+
     // MOVE THE PIPES
     pipes.forEach(pipe => {
-        // console.log(pipe); // shows a bunch of divs being loaded
-        pipe.x -= player.speed; // move pipe by subrtacting player speed (set to 2 by default) from pipe's x coord
-        pipe.style.left = `${pipe.x}px`; // update left coord w pipe.x val in px. Happens every time we update pipe.x
+        pipe.x -= player.speed; // move pipe by subrtacting player speed from pipe's x coord
+        pipe.style.left = `${pipe.x}px`; // update left coord w pipe.x val in px
 
-        // check to see if pipes are off screen & build more. If pipe.x is less than 0, it means the pipe is off the page
+        // Check to see if pipes are off screen
         if (pipe.x < 0) {
-            pipe.parentElement.removeChild(pipe); // remove each pipe from the parent div (visible area) as it goes off the page
-            counter++; // increment by 1 for each pipe we remove (keeps track of how many we've gone through)
+            pipe.parentElement.removeChild(pipe);
+            counter++; // increment by 1 for each pipe removed (keeps track of how many we've gone through & how many new ones are needed)
         }
-        // Check if there is a COLLISION (this is the best place to do it)
-        console.log(isCollide(pipe, bird)); // returns true or false
+
+        // Check if there is a COLLISION with a pipe
         if (isCollide(pipe, bird)) {
-            // Need to pass in pipe & bird objects to check if they overlap
-            console.log("crash");
-            gameOver(bird); // play gameOver function if they collide
+            gameOver(bird);
         }
     })
 
-    // CREATE NEW PIPES. Because there is a top and bottom pipe (a set of 2 for each), we have to divide the counter by 2
-    counter = counter / 2; // how many we actually have to create
-    // loop through how many pipes have been removed in order to know how many new ones to create. Will usually only be 1 at a time, but just in case, we make it dynamic here. As one pipe is removed, 1 pipe is added to end of the screen
+    // CREATE NEW PIPES
+    counter = counter / 2; // how many new pipes we need to create
     for (let x = 0; x < counter; x++) {
-        buildPipes(0); // set start position to 0 this time, because the pipes do not need to be off screen first like they do with initial build
+        buildPipes(0);
     }
 }
 
 function isCollide(elementA, elementB) {
-    // We want to get the area where element A & B are both located in order to compare overlap (using getBoundingRect)
     let aRect = elementA.getBoundingClientRect();
-    // console.log(aRect); // returns values of bottom, height, left, right, top, x, y and width (for each pipe)
     let bRect = elementB.getBoundingClientRect();
-    // console.log(bRect); // shows bird's values (bc we pass it in second)
 
-    // Check if bottom of one rectangle is less than the top of the other OR if the top of the other is greater than the bottom of the second one. Must add a ! to negate it in order to return the correct boolean value we need (otherwise, it will return true when we really need false)
+    // Must add a ! here in order to return the correct boolean value we need
     return !(
-        // Need to return a boolean value in order to use it in our conditional
         (aRect.bottom < bRect.top) || // vertical overlap
         (aRect.top > bRect.bottom) || // vertical
-        (aRect.right < bRect.left) || // comparing opposite sides (horizontal)
-        (aRect.left > bRect.right)  // horizontal overlap
+        (aRect.right < bRect.left) || // horizontal overlap
+        (aRect.left > bRect.right)  // horizontal
     )
 }
 
-// pass in the current bird object from playGame
 function gameOver(bird) {
     player.inPlay = false; // stops game
     gameMessage.classList.remove("hide");
