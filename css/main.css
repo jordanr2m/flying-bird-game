@@ -18,13 +18,14 @@ body {
 }
 
 .startScreen {
-    position: absolute;
-    background-color: red;
     cursor: pointer;
+    font-family: "Roboto Mono", monospace;
+    color: white;
+    background-color: red;
+    position: absolute;
+    width: 50%;
     left: 25%;
     top: 100px;
-    color: white;
-    width: 50%;
     /* center align */
     text-align: center;
     padding: 15px;
@@ -45,11 +46,13 @@ body {
 .gameMessage {
     position: absolute;
     top: 10%;
-    text-align: center;
     left: 20%;
     width: 60%;
     background-color: aliceblue;
+    text-align: center;
+    padding: 15px 0;
     font-size: 1.5em;
+    line-height: 1.5em;
     cursor: pointer;
     /* overlay it on top of game */
     z-index: 99;
@@ -59,6 +62,7 @@ body {
     width: 100px; /* Default width */
     position: absolute; /* Need this in order to move elements */
     text-align: center;
+    font-family: "Roboto Mono", monospace;
 }
 
 /* Bird Character styling */
@@ -68,9 +72,6 @@ body {
     left: 50px;
     width: 50px;
     height: 44px;
-     /* in case we want to write in it */
-    line-height: 40px;
-    font-size: 1.5em;
     background-image: url(../img/color-bird-48.png);
     background-size: cover;
 }
