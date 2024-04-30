@@ -36,13 +36,6 @@ body {
     display: none;
 }
 
-.gameArea {
-    background-color: skyblue;
-    width: 100%;
-    height: 100vh;
-    margin: auto; /* in case want to adjust size later */
-}
-
 .gameMessage {
     position: absolute;
     top: 10%;
@@ -56,6 +49,13 @@ body {
     cursor: pointer;
     /* overlay it on top of game */
     z-index: 99;
+}
+
+.gameArea {
+    background-color: skyblue;
+    width: 100%;
+    height: 100vh;
+    margin: auto; /* in case want to adjust size later */
 }
 
 .pipe {

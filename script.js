@@ -3,10 +3,8 @@ const startScreen = document.querySelector(".startScreen");
 const gameArea = document.querySelector(".gameArea");
 const gameMessage = document.querySelector(".gameMessage");
 
-// Track keys player presses
-let keys = {};
-// Store player info
-let player = {};
+let keys = {}; // Track keys player presses
+let player = {}; // Store player info
 
 function start() {
     player.speed = 2; // How quickly the player moves
@@ -18,7 +16,7 @@ function start() {
     gameMessage.classList.add("hide");
     startScreen.classList.add("hide");
 
-    // Create bird character element
+    // Create BIRD character element
     let bird = document.createElement("div");
     bird.classList.add("bird");
     let wing = document.createElement("span");
@@ -41,7 +39,7 @@ function start() {
 
     // Kick off animation
     window.requestAnimationFrame(playGame);
-}
+};
 
 function buildPipes(startPos) {
     // calculate screen size for pipe positioning
@@ -75,12 +73,12 @@ function buildPipes(startPos) {
     pipe2.style.bottom = "0px"; // puts pipes at bottom of screen
     pipe2.style.backgroundColor = pipeColor;
     gameArea.appendChild(pipe2);
-}
+};
 
 // Generate random hex code color
 function randomColor() {
     return `#${Math.random().toString(16).slice(-6)}`
-}
+};
 
 function movePipes(bird) {
     let pipes = document.querySelectorAll(".pipe");
@@ -108,25 +106,25 @@ function movePipes(bird) {
     for (let x = 0; x < counter; x++) {
         buildPipes(0);
     }
-}
+};
 
 function isCollide(elementA, elementB) {
     let aRect = elementA.getBoundingClientRect();
     let bRect = elementB.getBoundingClientRect();
 
-    // Must add a ! here in order to return the correct boolean value we need
+    // Must add a ! here in order to return the correct boolean value
     return !(
         (aRect.bottom < bRect.top) || // vertical overlap
         (aRect.top > bRect.bottom) || // vertical
         (aRect.right < bRect.left) || // horizontal overlap
         (aRect.left > bRect.right)  // horizontal
     )
-}
+};
 
 function gameOver(bird) {
     player.inPlay = false; // stops game
-    gameMessage.classList.remove("hide");
     bird.setAttribute("style", "transform: rotate(180deg)"); // flip bird upside down
+    gameMessage.classList.remove("hide"); // show game over message
     // add 1 to score to account for span discrep
     gameMessage.innerHTML = `<u>Game Over</u><br> 
         You scored <b>${player.score + 1}</b> points<br> 
@@ -134,64 +132,60 @@ function gameOver(bird) {
 };
 
 // MAIN GAMEPLAY FUNCTION
-// requestAnimationFrame is a method that provides a smooth way to transition & allows us to create smooth animations. Use it to loop through and continuously play the same animation
 function playGame() {
     // Check if game is in play or not
     if (player.inPlay) {
-        // Grab elements we created at start of game
+        // Grab elements created at start of game
         let bird = document.querySelector(".bird");
         let wing = document.querySelector(".wing");
 
-        // MOVE PIPES (must be after we select bird so that we can pass it in)
+        // MOVE PIPES
         movePipes(bird);
 
-        // Wings will only move when an arrow key is pressed
+        // Move wings when an arrow key is pressed
         let move = false;
 
-        // Check values of keys. Saying, "if this value exists AKA if the key was pressed and is true (keydown), do this". Just use if instead of else if in case there are multiple keys pressed at once. Gives horizontal and vertical angled movement
-        // We add in conditions to prevent the character from going off screen. Subtract to account for size of bird div
+        // PLAYER MOVEMENT. Add in conditions here to prevent the character from going off screen. Subtract to account for size of bird div
         if (keys.ArrowLeft && player.x > 0) {
-            player.x -= player.speed; // gives movement. Set speed in start function
+            player.x -= player.speed;
             move = true;
         }
         if (keys.ArrowRight && player.x < (gameArea.offsetWidth - 50)) {
-            player.x += player.speed; // increasing x
+            player.x += player.speed;
             move = true;
         }
         // Move up using arrow or space bar
         if ((keys.ArrowUp || keys.Space) && player.y > 0) {
-            player.y -= (player.speed * 5); // going up. Mult by 5 to make it go up faster and bc must be greater than 4 to offset game gravity
+            player.y -= (player.speed * 5); // going up. Mult by 5 to make it go up faster than game's gravity
             move = true;
         }
         if (keys.ArrowDown && player.y < (gameArea.offsetHeight - 44)) {
-            player.y += player.speed; // going down
+            player.y += player.speed;
             move = true;
         }
 
-        // Check to see if wing movement is true & move wings if it is
+        // Move wings
         if (move) {
-            wing.pos = (wing.pos === 17) ? 21 : 17;
+            wing.pos = (wing.pos === 17) ? 21 : 17; // oscillate between 17 & 21px for wing position
             wing.style.top = `${wing.pos}px`;
         }
 
-        // Add gravity to pull bird down. Add before we set the style
+        // Gravity to pull bird down
         player.y += (player.speed * 2);
 
-        // Check if the bird is off the bottom of the screen & GAME OVER!!
+        // GAME OVER if bird goes off bottom of screen
         if (player.y > gameArea.offsetHeight) {
-            console.log("game over");
             gameOver(bird);
         }
 
-        // Updating position of bird (add last after all other updates to coords are made). Wing will also be moved since it is inside of the bird
-        bird.style.left = `${player.x}px`; // left position (matches what we set in start function)
-        bird.style.top = `${player.y}px`; // top position
-        // console.log(player); // shows coordinates of x and y props
+        // Update position of bird
+        bird.style.left = `${player.x}px`;
+        bird.style.top = `${player.y}px`;
 
-        // Kick off animation again so we are continuously looping through this function
-        window.requestAnimationFrame(playGame); // provide the function we are looping through here
+        // Keep looping through the animation
+        window.requestAnimationFrame(playGame);
 
-        // Increment & show score
+        // Increment & show player score
         player.score++;
         score.innerText = `Score: ${player.score}`
     }
