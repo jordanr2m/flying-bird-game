@@ -106,7 +106,7 @@ function movePipes(bird) {
     // CREATE NEW PIPES
     counter = counter / 2; // how many new pipes we need to create
     for (let x = 0; x < counter; x++) {
-        buildPipes(0);
+        buildPipes(0); // pass in 0 as starting position
     }
 };
 
