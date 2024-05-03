@@ -156,8 +156,8 @@ function playGame() {
             player.x += player.speed;
             move = true;
         }
-        // Move up using arrow or space bar
-        if ((keys.ArrowUp || keys.Space) && player.y > 0) {
+        // Move up using arrow or space bar. > 47 to account for score div
+        if ((keys.ArrowUp || keys.Space) && player.y > 47) {
             player.y -= (player.speed * 5); // going up. Mult by 5 to make it go up faster than game's gravity
             move = true;
         }
