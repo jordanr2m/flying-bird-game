@@ -1,6 +1,5 @@
 body {
-    /* Hide scrollbars */
-    overflow: hidden;
+    overflow: hidden; /* Hide scrollbars */
     font-family: "Roboto Mono", monospace;
 }
 
@@ -64,20 +63,25 @@ p.instructions {
     display: none;
 }
 
-.gameMessage {
-    font-family: serif;
+.gameMessage,
+.small-screen-msg {
     position: absolute;
     top: 10%;
-    left: 20%;
+    left: 19%;
     width: 60%;
     background-color: aliceblue;
     text-align: center;
     padding: 15px;
     font-size: 1.5em;
-    line-height: 1.5em;
+    line-height: 1.75em;
     cursor: pointer;
     /* overlay it on top of game */
     z-index: 99;
+}
+
+/* Hide message on Desktop */
+.small-screen-msg {
+    display: none;
 }
 
 .gameArea {
@@ -91,7 +95,6 @@ p.instructions {
     width: 100px; /* Default width */
     position: absolute; /* Need this in order to move elements */
     text-align: center;
-    font-family: "Roboto Mono", monospace;
 }
 
 /* Bird Character styling */
@@ -115,4 +118,16 @@ p.instructions {
     /* Defualt positions within bird body */
     top: 17px;
     left: -3px;
+}
+
+
+/*** Message for Non-Desktops ***/
+@media only screen and (max-width: 900px) {
+    .button-container {
+        display: none;
+    }
+
+    .small-screen-msg {
+        display: block;
+    }
 }
